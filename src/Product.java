@@ -40,4 +40,5 @@ public abstract class Product {
     public void setPriceOfProduct(double priceOfProduct) {
         this.priceOfProduct = priceOfProduct;
     }
+
 }

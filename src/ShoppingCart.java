@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
-public interface ShoppingCart {
-    public static ArrayList<Product> listOfProducts=new ArrayList<>();
+public class ShoppingCart {
+    private ArrayList<Product> listOfProducts;
+    public ShoppingCart(){
+        this.listOfProducts=new ArrayList<>();
+    }
 }

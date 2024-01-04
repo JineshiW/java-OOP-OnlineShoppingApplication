@@ -1,6 +1,10 @@
+import java.util.Scanner;
+
 public class Clothing extends Product{
     private int size;
     private String color;
+
+    public Scanner input=new Scanner(System.in);
 
     public Clothing(String name, double price, int size, String color) {
         super(name, price);
@@ -23,4 +27,6 @@ public class Clothing extends Product{
     public void setColor(String color) {
         this.color = color;
     }
+
+
 }

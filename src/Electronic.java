@@ -1,6 +1,10 @@
+import java.util.Scanner;
+
 public class Electronic extends Product {
     private String brand;
     private int warrantyPeriod;
+
+    public static Scanner input=new Scanner(System.in);
 
     public Electronic(String name, double price, String brand, int warrantyPeriod) {
         super(name, price);
@@ -23,5 +27,6 @@ public class Electronic extends Product {
     public void setWarrantyPeriod(int warrantyPeriod) {
         this.warrantyPeriod = warrantyPeriod;
     }
+
 
 }
