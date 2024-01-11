@@ -4,7 +4,8 @@ public abstract class Product {
     private int noOfAvailableItems;
     private double priceOfProduct;
 
-    public Product(String productName, double priceOfProduct) {
+    public Product(int productID, String productName, double priceOfProduct) {
+        this.productID=productID;
         this.productName = productName;
         this.priceOfProduct = priceOfProduct;
     }

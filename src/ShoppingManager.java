@@ -7,5 +7,5 @@ public interface ShoppingManager {
 
     void printProducts();
 
-    void calculateTotalCost();
+//    void calculateTotalCost();
 }

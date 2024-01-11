@@ -6,8 +6,8 @@ public class Electronic extends Product {
 
     public static Scanner input=new Scanner(System.in);
 
-    public Electronic(String name, double price, String brand, int warrantyPeriod) {
-        super(name, price);
+    public Electronic(int productID,String name, double price, String brand, int warrantyPeriod) {
+        super(productID,name, price);
         this.brand = brand;
         this.warrantyPeriod = warrantyPeriod;
     }

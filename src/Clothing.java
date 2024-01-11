@@ -6,8 +6,8 @@ public class Clothing extends Product{
 
     public Scanner input=new Scanner(System.in);
 
-    public Clothing(String name, double price, int size, String color) {
-        super(name, price);
+    public Clothing(int productID,String name, double price, int size, String color) {
+        super(productID, name, price);
         this.size = size;
         this.color = color;
     }
