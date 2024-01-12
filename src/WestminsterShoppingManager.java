@@ -1,7 +1,11 @@
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,8 +17,8 @@ public class WestminsterShoppingManager implements ShoppingManager {
 
     int maxProducts = 50;
 
-    public WestminsterShoppingManager() {
-        this.products = new ArrayList<>();
+    public WestminsterShoppingManager(ArrayList<Product> products) {
+        this.products = products;
     }
 
 
@@ -48,6 +52,7 @@ public class WestminsterShoppingManager implements ShoppingManager {
                     case 4:
                         saveToFile();
                         break;
+
                     case 0:
                         System.out.println("Thank you for using the program. Goodbye!");
                         break;
@@ -307,11 +312,176 @@ public class WestminsterShoppingManager implements ShoppingManager {
                 e.printStackTrace();
             }
 
+
         }
+    }
+
+    public void loadDataFromFile() {
+        try {
+            File file = new File("prodDetails.txt");
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                int productId = Integer.parseInt(scanner.nextLine().split(": ")[1]);
+
+                String productName = scanner.nextLine().split(": ")[1];
+
+                double price = Double.parseDouble(scanner.nextLine().split(": ")[1]);
+
+                String itemType = scanner.nextLine().split(": ")[1];
+
+                if ("Electronics".equals(itemType)) {
+                    String brand = scanner.nextLine().split(": ")[1];
+
+                    String warrantyPeriodString = scanner.nextLine().split(": ")[1];
+                    int warrantyPeriod = Integer.parseInt(warrantyPeriodString.replaceAll("\\D", ""));
+
+                    Electronic electronic = new Electronic(productId, productName, price, brand, warrantyPeriod);
+                    products.add(electronic);
+                } else if ("Clothing".equals(itemType)) {
+                    int size = Integer.parseInt(scanner.nextLine().split(": ")[1]);
+
+                    String color = scanner.nextLine().split(": ")[1];
+
+                    Clothing clothing = new Clothing(productId, productName, price, size, color);
+                    products.add(clothing);
+                }
+
+                // Skip the empty line between product entries
+                if (scanner.hasNextLine()) {
+                    scanner.nextLine();
+                }
+            }
+
+            System.out.println("Data loaded successfully from file.");
+
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found. No data loaded.");
+        } catch (NumberFormatException e) {
+            System.out.println("Error parsing data from file. Check the file format.");
+        }
+    }
+    public ArrayList<Product> getProducts() {
+        return this.products;
+    }
+
+
 //        public void calculateTotalCost () {
 //
 //        }
+
+    public static class westminsterFrame extends JFrame {
+        private JTable productTable;
+        private DefaultTableModel tableModel;
+        private ArrayList<Product> products;  // New field to store the reference to the list of products
+
+        public westminsterFrame(String myFrame, ArrayList<Product> products) {
+            // Assigning the list of products to the local field
+            this.products = products;
+
+            setTitle("Westminster Shopping Center");
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+            JComboBox<String> productType = new JComboBox<>(new String[]{"All", "Electronics", "Clothing"});
+
+            // Set layout to FlowLayout with left and right margins
+            setLayout(new FlowLayout(FlowLayout.LEADING, 20, 20));
+
+            // Create an  label on the left side for margin
+            JLabel leftMargin = new JLabel("Select Product Category");
+            add(leftMargin);
+
+            // Add the JComboBox to the frame
+            add(productType);
+
+            // Create an empty label on the right side for margin
+            JLabel rightMargin = new JLabel(" ");
+            add(rightMargin);
+
+            tableModel = new DefaultTableModel(new Object[]{"Product ID", "Product Name", "Price", "Category", "Brand", "Size", "Color"}, 0);
+
+            // Creating the JTable with the populated table model
+            productTable = new JTable(tableModel);
+
+            // Creating a JScrollPane to add the table to and enable scrolling
+            JScrollPane scrollPane = new JScrollPane(productTable);
+
+            // Adding the JScrollPane to the frame at the CENTER position
+            add(scrollPane, BorderLayout.CENTER);
+
+            loadDataFromFileToGUI();
+
+
+        }
+        private void loadDataFromFileToGUI() {
+            try {
+                File file = new File("prodDetails.txt");
+                Scanner scanner = new Scanner(file);
+
+                // Clear existing data from the table model
+                tableModel.setRowCount(0);
+
+                while (scanner.hasNextLine()) {
+                    int productId = Integer.parseInt(scanner.nextLine().split(": ")[1]);
+                    String productName = scanner.nextLine().split(": ")[1];
+                    double price = Double.parseDouble(scanner.nextLine().split(": ")[1]);
+                    String itemType = scanner.nextLine().split(": ")[1];
+
+                    if ("Electronics".equals(itemType)) {
+                        String brand = scanner.nextLine().split(": ")[1];
+                        String warrantyPeriodString = scanner.nextLine().split(": ")[1];
+                        int warrantyPeriod = Integer.parseInt(warrantyPeriodString.replaceAll("\\D", ""));
+                        Electronic electronic = new Electronic(productId, productName, price, brand, warrantyPeriod);
+                        products.add(electronic);
+                    } else if ("Clothing".equals(itemType)) {
+                        int size = Integer.parseInt(scanner.nextLine().split(": ")[1]);
+                        String color = scanner.nextLine().split(": ")[1];
+                        Clothing clothing = new Clothing(productId, productName, price, size, color);
+                        products.add(clothing);
+                    }
+
+                    // Add the loaded data to the table model
+                    Object[] row = new Object[7];
+                    row[0] = productId;
+                    row[1] = productName;
+                    row[2] = price;
+
+                    if ("Electronics".equals(itemType)) {
+                        row[3] = "Electronics";
+                        row[4] = ((Electronic) products.get(products.size() - 1)).getBrand();
+                        row[5] = "";  // Placeholder for Size
+                        row[6] = "";  // Placeholder for Color
+                    } else if ("Clothing".equals(itemType)) {
+                        row[3] = "Clothing";
+                        row[4] = "";  // Placeholder for Brand
+                        row[5] = ((Clothing) products.get(products.size() - 1)).getSize();
+                        row[6] = ((Clothing) products.get(products.size() - 1)).getColor();
+                    }
+
+                    // Add the row to the table model
+                    tableModel.addRow(row);
+
+                    // Skip the empty line between product entries
+                    if (scanner.hasNextLine()) {
+                        scanner.nextLine();
+                    }
+                }
+
+                System.out.println("Data loaded successfully from file.");
+
+                scanner.close();
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found. No data loaded.");
+            } catch (NumberFormatException e) {
+                System.out.println("Error parsing data from file. Check the file format.");
+            }
+        }
+
+
+
+
+
+
     }
-
 }
-
