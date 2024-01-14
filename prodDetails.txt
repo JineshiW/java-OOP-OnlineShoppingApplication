@@ -1,14 +1,28 @@
+Product ID: 1
+Product Name: 1
+Price: 1.0
+Item Type: Electronics
+Brand: 1
+Warranty Period: 1 months
+
 Product ID: 2
-Product Name: Puma
-Price: 2500.0
+Product Name: 2
+Price: 2.0
 Item Type: Clothing
-Size: 12
-Color: Blue
+Size: 2
+Color: 2
 
 Product ID: 3
-Product Name: watch
-Price: 15000.0
-Item Type: Electronics
-Brand: Titanium
-Warranty Period: 12 months
+Product Name: 3
+Price: 3.0
+Item Type: Clothing
+Size: 3
+Color: 3
+
+Product ID: 5
+Product Name: 5
+Price: 5.0
+Item Type: Clothing
+Size: 5
+Color: 5
 
